@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
+using System.Web.OData;
 using System.Web.OData.Builder;
 using System.Web.OData.Extensions;
 using Abp.Application.Services;
 using Abp.Configuration.Startup;
+using Abp.Dependency;
 using Abp.Modules;
 using Abp.WebApi;
 using Abp.WebApi.Controllers.Dynamic.Builders;
@@ -20,6 +22,8 @@ namespace AbpODataDemo
 
         public override void Initialize()
         {
+            IocManager.Register<MetadataController>(DependencyLifeStyle.Transient);
+
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             DynamicApiControllerBuilder
