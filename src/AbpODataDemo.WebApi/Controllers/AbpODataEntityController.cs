@@ -51,7 +51,7 @@ namespace AbpODataDemo.Controllers
         [EnableQuery]
         public SingleResult<TEntity> Get([FromODataUri] TPrimaryKey key)
         {
-            var entity = Repository.GetAll().Where(e => Equals(e.Id, key));
+            var entity = Repository.GetAll().Where(e => e.Id.Equals(key));
             return SingleResult.Create(entity);
         }
 
