@@ -21,6 +21,7 @@ namespace AbpODataDemo.Controllers
     }
 
     public abstract class AbpODataEntityController<TEntity, TPrimaryKey> : ODataController
+    where TPrimaryKey: IEquatable<TPrimaryKey>
     where TEntity : class, IEntity<TPrimaryKey>
     {
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
@@ -50,10 +51,8 @@ namespace AbpODataDemo.Controllers
         [EnableQuery]
         public SingleResult<TEntity> Get([FromODataUri] TPrimaryKey key)
         {
-            var entity = Repository.FirstOrDefault(key);
-
-            //TODO: How to return a single value, instead of Queryable???
-            return SingleResult.Create(new[] { entity }.AsQueryable());
+            var entity = Repository.GetAll().Where(e => Equals(e.Id, key));
+            return SingleResult.Create(entity);
         }
 
         protected override void Dispose(bool disposing)
