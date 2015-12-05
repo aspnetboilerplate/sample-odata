@@ -21,6 +21,7 @@ namespace AbpODataDemo.Controllers
     }
 
     public abstract class AbpODataEntityController<TEntity, TPrimaryKey> : ODataController
+    where TPrimaryKey: IEquatable<TPrimaryKey>
     where TEntity : class, IEntity<TPrimaryKey>
     {
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
@@ -50,12 +51,60 @@ namespace AbpODataDemo.Controllers
         [EnableQuery]
         public SingleResult<TEntity> Get([FromODataUri] TPrimaryKey key)
         {
-            var entity = Repository.FirstOrDefault(key);
-
-            //TODO: How to return a single value, instead of Queryable???
-            return SingleResult.Create(new[] { entity }.AsQueryable());
+            var entity = Repository.GetAll().Where(e => e.Id.Equals(key));
+            return SingleResult.Create(entity);
         }
 
+        public async Task<IHttpActionResult> Post(TEntity entity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var created = await Repository.InsertAsync(entity);
+            return Created(created);
+        }
+
+        public async Task<IHttpActionResult> Patch([FromODataUri] TPrimaryKey key, Delta<TEntity> entity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var dbLookup = await Repository.GetAsync(key);
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            entity.Patch(dbLookup);
+            return Updated(entity);
+        }
+
+        public async Task<IHttpActionResult> Put([FromODataUri] TPrimaryKey key, TEntity update)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (!Equals(key, update.Id))
+            {
+                return BadRequest();
+            }
+            var updated = await Repository.UpdateAsync(update);
+            return Updated(updated);
+        }
+
+        public async Task<IHttpActionResult> Delete([FromODataUri] TPrimaryKey key)
+        {
+            var product = await Repository.GetAsync(key);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            await Repository.DeleteAsync(key);
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+        
         protected override void Dispose(bool disposing)
         {
             if (!_disposed)
