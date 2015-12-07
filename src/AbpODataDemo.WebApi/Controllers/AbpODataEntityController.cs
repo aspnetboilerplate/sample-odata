@@ -94,7 +94,7 @@ namespace AbpODataDemo.Controllers
                 return BadRequest(ModelState);
             }
             
-            if (!Equals(key, update.Id))
+            if (!key.Equals(update.Id))
             {
                 return BadRequest();
             }
