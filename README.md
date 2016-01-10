@@ -6,6 +6,7 @@
 ## How to test
 
 * Restore all nuget packages.
-* Set AbpODataDemo.WebHost as startup project
-* Perform a GET request to http://localhost:61842/odata/Persons to get list of people.
-* Perform a GET request to http://localhost:61842/odata/$metadata#Persons to get person metadata.
+* Set __AbpODataDemo.WebHost__ as startup project
+* Open Package Manager Console, set __AbpODataDemo.EntityFramework__ as default project and run __Update-Database__ command.
+* Perform a GET request to __http://localhost:61842/odata/Persons__ to get list of people.
+* Perform a GET request to __http://localhost:61842/odata/$metadata#Persons__ to get person metadata.
