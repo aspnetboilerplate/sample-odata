@@ -11,7 +11,10 @@ namespace AbpODataDemo
     {
         public override void PreInitialize()
         {
-            Configuration.Modules.AbpWebApiOData().ODataModelBuilder.EntitySet<Person>("Persons");
+            var builder = Configuration.Modules.AbpWebApiOData().ODataModelBuilder;
+
+            //Configure your entities here...
+            builder.EntitySet<Person>("Persons");
         }
 
         public override void Initialize()
