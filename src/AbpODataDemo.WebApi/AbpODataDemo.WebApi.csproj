@@ -49,8 +49,8 @@
       <HintPath>..\packages\Abp.Web.Api.0.7.7.2\lib\net452\Abp.Web.Api.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Abp.Web.Api.OData, Version=0.7.7.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Abp.Web.Api.OData.0.7.7.2\lib\net452\Abp.Web.Api.OData.dll</HintPath>
+    <Reference Include="Abp.Web.Api.OData, Version=0.7.7.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Abp.Web.Api.OData.0.7.7.3\lib\net452\Abp.Web.Api.OData.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">

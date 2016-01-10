@@ -1,13 +1,9 @@
 ﻿using System.Reflection;
-using System.Web.OData;
-using System.Web.OData.Builder;
-using System.Web.OData.Extensions;
 using Abp.Application.Services;
-using Abp.Configuration.Startup;
-using Abp.Dependency;
 using Abp.Modules;
 using Abp.WebApi;
 using Abp.WebApi.Controllers.Dynamic.Builders;
+using Abp.WebApi.OData.Configuration;
 using AbpODataDemo.People;
 
 namespace AbpODataDemo
@@ -17,33 +13,16 @@ namespace AbpODataDemo
     {
         public override void PreInitialize()
         {
-            ConfigureOData();
+            Configuration.Modules.AbpWebApiOData().ODataModelBuilder.EntitySet<Person>("Persons");
         }
 
         public override void Initialize()
         {
-            IocManager.Register<MetadataController>(DependencyLifeStyle.Transient);
-
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             DynamicApiControllerBuilder
                 .ForAll<IApplicationService>(typeof(AbpODataDemoApplicationModule).Assembly, "app")
                 .Build();
-        }
-
-        private void ConfigureOData()
-        {
-            ODataModelBuilder builder = new ODataConventionModelBuilder();
-
-            //Add your entities want to expose
-            builder.EntitySet<Person>("Persons");
-            
-            Configuration.Modules.AbpWebApi()
-                .HttpConfiguration.MapODataServiceRoute(
-                    routeName: "ODataRoute",
-                    routePrefix: "odata",
-                    model: builder.GetEdmModel()
-                );
         }
     }
 }
