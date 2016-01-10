@@ -1,14 +1,12 @@
 ﻿using System.Reflection;
-using Abp.Application.Services;
 using Abp.Modules;
-using Abp.WebApi;
-using Abp.WebApi.Controllers.Dynamic.Builders;
+using Abp.WebApi.OData;
 using Abp.WebApi.OData.Configuration;
 using AbpODataDemo.People;
 
 namespace AbpODataDemo
 {
-    [DependsOn(typeof(AbpWebApiModule), typeof(AbpODataDemoApplicationModule))]
+    [DependsOn(typeof(AbpWebApiODataModule))]
     public class AbpODataDemoWebApiModule : AbpModule
     {
         public override void PreInitialize()
@@ -19,10 +17,6 @@ namespace AbpODataDemo
         public override void Initialize()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-
-            DynamicApiControllerBuilder
-                .ForAll<IApplicationService>(typeof(AbpODataDemoApplicationModule).Assembly, "app")
-                .Build();
         }
     }
 }

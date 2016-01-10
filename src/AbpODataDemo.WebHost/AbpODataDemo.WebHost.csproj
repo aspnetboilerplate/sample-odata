@@ -140,6 +140,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="index.html" />
     <Content Include="packages.config" />
     <Content Include="log4net.config" />
     <None Include="Web.Debug.config">
@@ -164,10 +165,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AbpODataDemo.Application\AbpODataDemo.Application.csproj">
-      <Project>{EDF5D964-4C0F-4F19-B674-58A38A5E5401}</Project>
-      <Name>AbpODataDemo.Application</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AbpODataDemo.Core\AbpODataDemo.Core.csproj">
       <Project>{17298EA0-AF73-4F30-B6F1-2066100D7D74}</Project>
       <Name>AbpODataDemo.Core</Name>

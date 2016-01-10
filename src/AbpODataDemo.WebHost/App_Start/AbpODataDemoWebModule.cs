@@ -8,7 +8,7 @@ using Abp.Modules;
 
 namespace AbpODataDemo.WebHost
 {
-    [DependsOn(typeof(AbpODataDemoDataModule), typeof(AbpODataDemoApplicationModule), typeof(AbpODataDemoWebApiModule))]
+    [DependsOn(typeof(AbpODataDemoDataModule), typeof(AbpODataDemoWebApiModule))]
     public class AbpODataDemoWebHostModule : AbpModule
     {
         public override void PreInitialize()
