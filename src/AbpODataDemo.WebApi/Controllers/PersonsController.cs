@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Repositories;
+using Abp.WebApi.OData;
 using AbpODataDemo.People;
 
 namespace AbpODataDemo.Controllers
