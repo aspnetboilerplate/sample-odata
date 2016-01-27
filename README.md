@@ -11,3 +11,7 @@
 * Run the application.
 * Perform a GET request to __http://localhost:61842/odata/Persons__ to get list of people.
 * Perform a GET request to __http://localhost:61842/odata/$metadata#Persons__ to get person metadata.
+
+## Documentation
+
+See http://aspnetboilerplate.com/Pages/Documents/OData-Integration
