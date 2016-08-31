@@ -19,6 +19,7 @@ namespace AbpODataDemo
             //Configure your entities here...
             builder.EntitySet<Person>("Persons");
 
+            //TODO: Remove after ABP v0.11.2.0 upgrade
             Configuration.Validation.IgnoredTypes.AddIfNotContains(typeof(Type));
             Configuration.Validation.IgnoredTypes.AddIfNotContains(typeof(Delta));
         }
