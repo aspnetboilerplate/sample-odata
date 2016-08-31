@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Web.OData;
+using Abp.Collections.Extensions;
 using Abp.Modules;
 using Abp.WebApi.OData;
 using Abp.WebApi.OData.Configuration;
@@ -15,6 +18,9 @@ namespace AbpODataDemo
 
             //Configure your entities here...
             builder.EntitySet<Person>("Persons");
+
+            Configuration.Validation.IgnoredTypes.AddIfNotContains(typeof(Type));
+            Configuration.Validation.IgnoredTypes.AddIfNotContains(typeof(Delta));
         }
 
         public override void Initialize()
