@@ -142,7 +142,7 @@ namespace AbpODataDemo.Web.Host.Startup
 
             app.UseOData(builder =>
             {
-                builder.EntitySet<Person>("Persons");
+                builder.EntitySet<Person>("Persons").EntityType.Expand().Filter().OrderBy().Page();
             });
 
             app.UseUnitOfWork(options =>
