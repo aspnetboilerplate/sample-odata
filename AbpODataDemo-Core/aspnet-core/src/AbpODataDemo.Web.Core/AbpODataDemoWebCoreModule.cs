@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Abp.AspNetCore;
 using Abp.AspNetCore.Configuration;
+using Abp.AspNetCore.OData;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Zero.Configuration;
@@ -23,7 +24,8 @@ namespace AbpODataDemo
     [DependsOn(
          typeof(AbpODataDemoApplicationModule),
          typeof(AbpODataDemoEntityFrameworkModule),
-         typeof(AbpAspNetCoreModule)
+         typeof(AbpAspNetCoreModule),
+         typeof(AbpAspNetCoreODataModule)
 #if FEATURE_SIGNALR 
         ,typeof(AbpWebSignalRModule)
 #elif FEATURE_SIGNALR_ASPNETCORE

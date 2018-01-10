@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using Castle.Facilities.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Abp.AspNetCore;
@@ -14,6 +18,7 @@ using Abp.Extensions;
 using AbpODataDemo.Authentication.JwtBearer;
 using AbpODataDemo.Configuration;
 using AbpODataDemo.Identity;
+using AbpODataDemo.People;
 
 #if FEATURE_SIGNALR
 using Microsoft.AspNet.SignalR;
@@ -51,6 +56,21 @@ namespace AbpODataDemo.Web.Host.Startup
 #if FEATURE_SIGNALR_ASPNETCORE
             services.AddSignalR();
 #endif
+
+            services.AddOData();
+
+            // Workaround: https://github.com/OData/WebApi/issues/1177
+            services.AddMvcCore(options =>
+            {
+                foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+                foreach (var inputFormatter in options.InputFormatters.OfType<ODataInputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+            });
 
             // Configure CORS for angular2 UI
             services.AddCors(
@@ -120,8 +140,29 @@ namespace AbpODataDemo.Web.Host.Startup
             });
 #endif
 
+            var builder = new ODataConventionModelBuilder(app.ApplicationServices);
+
+            builder.EntitySet<Person>("Persons");
+
+            app.UseUnitOfWork(options =>
+            {
+                options.Filter = httpContext =>
+                {
+                    return httpContext.Request.Path.Value.StartsWith("/odata");
+                };
+            });
+
             app.UseMvc(routes =>
             {
+                routes.MapODataServiceRoute(
+                    routeName: "ODataRoute",
+                    routePrefix: "odata",
+                    model: builder.GetEdmModel()
+                );
+
+                // Workaround: https://github.com/OData/WebApi/issues/1175
+                routes.EnableDependencyInjection();
+
                 routes.MapRoute(
                     name: "defaultWithArea",
                     template: "{area}/{controller=Home}/{action=Index}/{id?}");
