@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +12,7 @@ using Microsoft.Net.Http.Headers;
 using Castle.Facilities.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Abp.AspNetCore;
+using Abp.AspNetCore.OData.Configuration;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
 using AbpODataDemo.Authentication.JwtBearer;
@@ -140,9 +140,10 @@ namespace AbpODataDemo.Web.Host.Startup
             });
 #endif
 
-            var builder = new ODataConventionModelBuilder(app.ApplicationServices);
-
-            builder.EntitySet<Person>("Persons");
+            app.UseOData(builder =>
+            {
+                builder.EntitySet<Person>("Persons");
+            });
 
             app.UseUnitOfWork(options =>
             {
@@ -154,14 +155,7 @@ namespace AbpODataDemo.Web.Host.Startup
 
             app.UseMvc(routes =>
             {
-                routes.MapODataServiceRoute(
-                    routeName: "ODataRoute",
-                    routePrefix: "odata",
-                    model: builder.GetEdmModel()
-                );
-
-                // Workaround: https://github.com/OData/WebApi/issues/1175
-                routes.EnableDependencyInjection();
+                routes.MapODataServiceRoute(app);
 
                 routes.MapRoute(
                     name: "defaultWithArea",
