@@ -250,3 +250,6 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+# Logs
+src/AbpODataDemo.Web.Host/App_Data/Logs/Logs.txt
