@@ -46,9 +46,11 @@ namespace AbpODataDemo.Web.Host.Startup
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // MVC
-            services.AddMvc(
-                options => options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName))
-            );
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName));
+                options.Filters.Add<ResultFilter>();
+            });
 
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
