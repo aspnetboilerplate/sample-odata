@@ -33,17 +33,17 @@ namespace AbpODataDemo.Controllers
             return base.Get(key);
         }
 
-        public override Task<IActionResult> Patch([FromODataUri] int key, Delta<Person> entity)
+        public override Task<IActionResult> Patch([FromODataUri] int key, [FromBody] Delta<Person> entity)
         {
             return base.Patch(key, entity);
         }
 
-        public override Task<IActionResult> Post(Person entity)
+        public override Task<IActionResult> Post([FromBody] Person entity)
         {
             return base.Post(entity);
         }
 
-        public override Task<IActionResult> Put([FromODataUri] int key, Person update)
+        public override Task<IActionResult> Put([FromODataUri] int key, [FromBody] Person update)
         {
             return base.Put(key, update);
         }
