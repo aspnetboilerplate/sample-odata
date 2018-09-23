@@ -9,9 +9,9 @@
 * Set __AbpODataDemo.Web.Host__ as startup project
 * Open Package Manager Console, set __AbpODataDemo.EntityFrameworkCore__ as default project and run __Update-Database__ command.
 * Run the application.
-* Perform a GET request to __http://localhost:62114/odata/Persons__ to get list of people.
-* Perform a GET request to __http://localhost:62114/odata/$metadata#Persons__ to get person metadata.
+* Perform a GET request to __http://localhost:21021/odata/Persons__ to get list of people.
+* Perform a GET request to __http://localhost:21021/odata/$metadata#Persons__ to get person metadata.
 
 ## Documentation
 
-See http://aspnetboilerplate.com/Pages/Documents/OData-Integration
+See http://aspnetboilerplate.com/Pages/Documents/OData-AspNetCore-Integration
