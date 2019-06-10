@@ -1,3 +1,7 @@
+# Important
+
+Issues of this repository are tracked on https://github.com/aspnetboilerplate/aspnetboilerplate. Please create your issues on https://github.com/aspnetboilerplate/aspnetboilerplate/issues.
+
 # Sample OData usage with ASP.NET Boilerplate
 
 Each sample project contains its own README in its own folder.
