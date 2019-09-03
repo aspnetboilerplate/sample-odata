@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using System.Web.OData;
 using Abp.Domain.Repositories;
 using Abp.WebApi.OData.Controllers;
 using AbpODataDemo.People;
+using Microsoft.AspNet.OData;
 
 namespace AbpODataDemo.Controllers
 {
