@@ -10,8 +10,7 @@ namespace AbpODataDemo.WebHost
         {
             AbpBootstrapper.IocManager
                 .IocContainer
-                .AddFacility<LoggingFacility>(f => f.UseLog4Net()
-                .WithConfig("log4net.config"));
+                .AddFacility<LoggingFacility>(f => f.UseLog4Net().WithConfig("log4net.config"));
 
             base.Application_Start(sender, e);
         }

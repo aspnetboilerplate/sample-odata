@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using System.Web.OData;
 using Abp.Collections.Extensions;
 using Abp.Modules;
 using Abp.WebApi.OData;
 using Abp.WebApi.OData.Configuration;
 using AbpODataDemo.People;
+using Microsoft.AspNet.OData;
 
 namespace AbpODataDemo
 {
