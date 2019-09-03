@@ -253,3 +253,4 @@ paket-files/
 
 # Logs
 src/AbpODataDemo.Web.Host/App_Data/Logs/Logs.txt
+src/AbpODataDemo.Web.Mvc/App_Data/Logs/Logs.txt
