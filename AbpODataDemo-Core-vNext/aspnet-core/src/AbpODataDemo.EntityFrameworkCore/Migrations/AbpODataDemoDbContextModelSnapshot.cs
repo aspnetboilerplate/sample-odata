@@ -15,7 +15,7 @@ namespace AbpODataDemo.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.1")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -609,6 +609,112 @@ namespace AbpODataDemo.Migrations
                         .IsUnique();
 
                     b.ToTable("AbpSettings");
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicEntityProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DynamicPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityFullName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DynamicPropertyId");
+
+                    b.HasIndex("EntityFullName", "DynamicPropertyId", "TenantId")
+                        .IsUnique()
+                        .HasFilter("[EntityFullName] IS NOT NULL AND [TenantId] IS NOT NULL");
+
+                    b.ToTable("AbpDynamicEntityProperties");
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicEntityPropertyValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DynamicEntityPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EntityId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DynamicEntityPropertyId");
+
+                    b.ToTable("AbpDynamicEntityPropertyValues");
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("InputType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Permission")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PropertyName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyName", "TenantId")
+                        .IsUnique()
+                        .HasFilter("[PropertyName] IS NOT NULL AND [TenantId] IS NOT NULL");
+
+                    b.ToTable("AbpDynamicProperties");
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicPropertyValue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DynamicPropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TenantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DynamicPropertyId");
+
+                    b.ToTable("AbpDynamicPropertyValues");
                 });
 
             modelBuilder.Entity("Abp.EntityHistory.EntityChange", b =>
@@ -1641,6 +1747,33 @@ namespace AbpODataDemo.Migrations
                     b.HasOne("AbpODataDemo.Authorization.Users.User", null)
                         .WithMany("Settings")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicEntityProperty", b =>
+                {
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicProperty", "DynamicProperty")
+                        .WithMany()
+                        .HasForeignKey("DynamicPropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicEntityPropertyValue", b =>
+                {
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicEntityProperty", "DynamicEntityProperty")
+                        .WithMany()
+                        .HasForeignKey("DynamicEntityPropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Abp.DynamicEntityProperties.DynamicPropertyValue", b =>
+                {
+                    b.HasOne("Abp.DynamicEntityProperties.DynamicProperty", "DynamicProperty")
+                        .WithMany("DynamicPropertyValues")
+                        .HasForeignKey("DynamicPropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Abp.EntityHistory.EntityChange", b =>

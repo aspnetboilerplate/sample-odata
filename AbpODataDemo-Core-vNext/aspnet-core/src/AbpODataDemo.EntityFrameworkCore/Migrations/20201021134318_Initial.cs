@@ -56,6 +56,22 @@ namespace AbpODataDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpDynamicProperties",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PropertyName = table.Column<string>(nullable: true),
+                    InputType = table.Column<string>(nullable: true),
+                    Permission = table.Column<string>(nullable: true),
+                    TenantId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpDynamicProperties", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpEditions",
                 columns: table => new
                 {
@@ -447,6 +463,48 @@ namespace AbpODataDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpDynamicEntityProperties",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EntityFullName = table.Column<string>(nullable: true),
+                    DynamicPropertyId = table.Column<int>(nullable: false),
+                    TenantId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpDynamicEntityProperties", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpDynamicEntityProperties_AbpDynamicProperties_DynamicPropertyId",
+                        column: x => x.DynamicPropertyId,
+                        principalTable: "AbpDynamicProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpDynamicPropertyValues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(nullable: false),
+                    TenantId = table.Column<int>(nullable: true),
+                    DynamicPropertyId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpDynamicPropertyValues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpDynamicPropertyValues_AbpDynamicProperties_DynamicPropertyId",
+                        column: x => x.DynamicPropertyId,
+                        principalTable: "AbpDynamicProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpFeatures",
                 columns: table => new
                 {
@@ -755,6 +813,28 @@ namespace AbpODataDemo.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpDynamicEntityPropertyValues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(nullable: false),
+                    EntityId = table.Column<string>(nullable: true),
+                    DynamicEntityPropertyId = table.Column<int>(nullable: false),
+                    TenantId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpDynamicEntityPropertyValues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AbpDynamicEntityPropertyValues_AbpDynamicEntityProperties_DynamicEntityPropertyId",
+                        column: x => x.DynamicEntityPropertyId,
+                        principalTable: "AbpDynamicEntityProperties",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpEntityPropertyChanges",
                 columns: table => new
                 {
@@ -853,6 +933,35 @@ namespace AbpODataDemo.Migrations
                 name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
                 table: "AbpBackgroundJobs",
                 columns: new[] { "IsAbandoned", "NextTryTime" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpDynamicEntityProperties_DynamicPropertyId",
+                table: "AbpDynamicEntityProperties",
+                column: "DynamicPropertyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpDynamicEntityProperties_EntityFullName_DynamicPropertyId_TenantId",
+                table: "AbpDynamicEntityProperties",
+                columns: new[] { "EntityFullName", "DynamicPropertyId", "TenantId" },
+                unique: true,
+                filter: "[EntityFullName] IS NOT NULL AND [TenantId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpDynamicEntityPropertyValues_DynamicEntityPropertyId",
+                table: "AbpDynamicEntityPropertyValues",
+                column: "DynamicEntityPropertyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpDynamicProperties_PropertyName_TenantId",
+                table: "AbpDynamicProperties",
+                columns: new[] { "PropertyName", "TenantId" },
+                unique: true,
+                filter: "[PropertyName] IS NOT NULL AND [TenantId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpDynamicPropertyValues_DynamicPropertyId",
+                table: "AbpDynamicPropertyValues",
+                column: "DynamicPropertyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_EntityChangeSetId",
@@ -1165,6 +1274,12 @@ namespace AbpODataDemo.Migrations
                 name: "AbpBackgroundJobs");
 
             migrationBuilder.DropTable(
+                name: "AbpDynamicEntityPropertyValues");
+
+            migrationBuilder.DropTable(
+                name: "AbpDynamicPropertyValues");
+
+            migrationBuilder.DropTable(
                 name: "AbpEntityPropertyChanges");
 
             migrationBuilder.DropTable(
@@ -1237,6 +1352,9 @@ namespace AbpODataDemo.Migrations
                 name: "Phones");
 
             migrationBuilder.DropTable(
+                name: "AbpDynamicEntityProperties");
+
+            migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
 
             migrationBuilder.DropTable(
@@ -1250,6 +1368,9 @@ namespace AbpODataDemo.Migrations
 
             migrationBuilder.DropTable(
                 name: "Persons");
+
+            migrationBuilder.DropTable(
+                name: "AbpDynamicProperties");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChangeSets");
