@@ -97,7 +97,7 @@ namespace AbpODataDemo.Web.Host.Startup
             services.AddOData();
 
             // Workaround: https://github.com/OData/WebApi/issues/1177
-            services.AddMvcCore(options =>
+            services.AddMvc(options =>
             {
                 foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
                 {
@@ -135,7 +135,7 @@ namespace AbpODataDemo.Web.Host.Startup
             // Return IQueryable from controllers
             app.UseUnitOfWork(options =>
             {
-                options.Filter = httpContext => httpContext.Request.Path.Value.StartsWith("/odata");
+                options.Filter = httpContext => httpContext.Request.Path.Value.StartsWith("/odata", StringComparison.InvariantCultureIgnoreCase);
             });
 
             app.UseODataBatching();
