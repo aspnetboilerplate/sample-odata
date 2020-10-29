@@ -12,6 +12,7 @@ using Microsoft.Net.Http.Headers;
 using Castle.Facilities.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using Abp.AspNetCore;
+using Abp.AspNetCore.Mvc.Results;
 using Abp.AspNetCore.OData.Configuration;
 using Abp.Castle.Logging.Log4Net;
 using Abp.Extensions;
@@ -19,7 +20,8 @@ using AbpODataDemo.Authentication.JwtBearer;
 using AbpODataDemo.Configuration;
 using AbpODataDemo.Identity;
 using AbpODataDemo.People;
-
+using AbpODataDemo.ResultFilters;
+using Microsoft.AspNetCore.Mvc;
 #if FEATURE_SIGNALR
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Cors;
@@ -49,8 +51,28 @@ namespace AbpODataDemo.Web.Host.Startup
             services.AddMvc(options =>
             {
                 options.Filters.Add(new CorsAuthorizationFilterFactory(_defaultCorsPolicyName));
-                options.Filters.Add<ResultFilter>();
             });
+
+            services.PostConfigure<MvcOptions>(options =>
+            {
+                for (var index = options.Filters.Count - 1; index >= 0; --index)
+                {
+                    if (options.Filters[index] is ServiceFilterAttribute &&
+                        ((ServiceFilterAttribute) options.Filters[index]).ServiceType != typeof(AbpResultFilter))
+                    {
+                        continue;
+                    }
+
+                    options.Filters.Insert(index, new ServiceFilterAttribute(typeof(ODataResultPageFilter))
+                    {
+                        Order = 0
+                    });
+
+                    options.Filters.RemoveAt(index + 1);
+                    break;
+                }
+            });
+
 
             IdentityRegistrar.Register(services);
             AuthConfigurer.Configure(services, _appConfiguration);
@@ -151,7 +173,7 @@ namespace AbpODataDemo.Web.Host.Startup
             {
                 options.Filter = httpContext =>
                 {
-                    return httpContext.Request.Path.Value.StartsWith("/odata");
+                    return httpContext.Request.Path.Value.StartsWith("/odata", StringComparison.InvariantCultureIgnoreCase);
                 };
             });
 
@@ -185,7 +207,7 @@ namespace AbpODataDemo.Web.Host.Startup
             app.Properties["host.AppName"] = "AbpODataDemo";
 
             app.UseAbp();
-            
+
             app.Map("/signalr", map =>
             {
                 map.UseCors(CorsOptions.AllowAll);
