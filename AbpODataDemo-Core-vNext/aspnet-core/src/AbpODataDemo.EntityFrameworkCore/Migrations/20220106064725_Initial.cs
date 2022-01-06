@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace AbpODataDemo.Migrations
 {
     public partial class Initial : Migration
@@ -11,23 +13,24 @@ namespace AbpODataDemo.Migrations
                 name: "AbpAuditLogs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true),
-                    ServiceName = table.Column<string>(maxLength: 256, nullable: true),
-                    MethodName = table.Column<string>(maxLength: 256, nullable: true),
-                    Parameters = table.Column<string>(maxLength: 1024, nullable: true),
-                    ReturnValue = table.Column<string>(nullable: true),
-                    ExecutionTime = table.Column<DateTime>(nullable: false),
-                    ExecutionDuration = table.Column<int>(nullable: false),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    Exception = table.Column<string>(maxLength: 2000, nullable: true),
-                    ImpersonatorUserId = table.Column<long>(nullable: true),
-                    ImpersonatorTenantId = table.Column<int>(nullable: true),
-                    CustomData = table.Column<string>(maxLength: 2000, nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    ServiceName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    MethodName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Parameters = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    ReturnValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExecutionTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExecutionDuration = table.Column<int>(type: "int", nullable: false),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ExceptionMessage = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    Exception = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    ImpersonatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    ImpersonatorTenantId = table.Column<int>(type: "int", nullable: true),
+                    CustomData = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,17 +41,17 @@ namespace AbpODataDemo.Migrations
                 name: "AbpBackgroundJobs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    JobType = table.Column<string>(maxLength: 512, nullable: false),
-                    JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
-                    TryCount = table.Column<short>(nullable: false),
-                    NextTryTime = table.Column<DateTime>(nullable: false),
-                    LastTryTime = table.Column<DateTime>(nullable: true),
-                    IsAbandoned = table.Column<bool>(nullable: false),
-                    Priority = table.Column<byte>(nullable: false)
+                    JobType = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    JobArgs = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: false),
+                    TryCount = table.Column<short>(type: "smallint", nullable: false),
+                    NextTryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastTryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsAbandoned = table.Column<bool>(type: "bit", nullable: false),
+                    Priority = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -59,12 +62,13 @@ namespace AbpODataDemo.Migrations
                 name: "AbpDynamicProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PropertyName = table.Column<string>(nullable: true),
-                    InputType = table.Column<string>(nullable: true),
-                    Permission = table.Column<string>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    PropertyName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InputType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Permission = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -75,17 +79,17 @@ namespace AbpODataDemo.Migrations
                 name: "AbpEditions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 32, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 64, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,18 +100,18 @@ namespace AbpODataDemo.Migrations
                 name: "AbpEntityChangeSets",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    ExtensionData = table.Column<string>(nullable: true),
-                    ImpersonatorTenantId = table.Column<int>(nullable: true),
-                    ImpersonatorUserId = table.Column<long>(nullable: true),
-                    Reason = table.Column<string>(maxLength: 256, nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true)
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExtensionData = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImpersonatorTenantId = table.Column<int>(type: "int", nullable: true),
+                    ImpersonatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    Reason = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,20 +122,20 @@ namespace AbpODataDemo.Migrations
                 name: "AbpLanguages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 64, nullable: false),
-                    Icon = table.Column<string>(maxLength: 128, nullable: true),
-                    IsDisabled = table.Column<bool>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Icon = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -142,17 +146,17 @@ namespace AbpODataDemo.Migrations
                 name: "AbpLanguageTexts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    LanguageName = table.Column<string>(maxLength: 128, nullable: false),
-                    Source = table.Column<string>(maxLength: 128, nullable: false),
-                    Key = table.Column<string>(maxLength: 256, nullable: false),
-                    Value = table.Column<string>(maxLength: 67108864, nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    LanguageName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", maxLength: 67108864, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,19 +167,19 @@ namespace AbpODataDemo.Migrations
                 name: "AbpNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    NotificationName = table.Column<string>(maxLength: 96, nullable: false),
-                    Data = table.Column<string>(maxLength: 1048576, nullable: true),
-                    DataTypeName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityTypeName = table.Column<string>(maxLength: 250, nullable: true),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityId = table.Column<string>(maxLength: 96, nullable: true),
-                    Severity = table.Column<byte>(nullable: false),
-                    UserIds = table.Column<string>(maxLength: 131072, nullable: true),
-                    ExcludedUserIds = table.Column<string>(maxLength: 131072, nullable: true),
-                    TenantIds = table.Column<string>(maxLength: 131072, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: true),
+                    DataTypeName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    Severity = table.Column<byte>(type: "tinyint", nullable: false),
+                    UserIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    ExcludedUserIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    TenantIds = table.Column<string>(type: "nvarchar(max)", maxLength: 131072, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -186,15 +190,15 @@ namespace AbpODataDemo.Migrations
                 name: "AbpNotificationSubscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    NotificationName = table.Column<string>(maxLength: 96, nullable: true),
-                    EntityTypeName = table.Column<string>(maxLength: 250, nullable: true),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityId = table.Column<string>(maxLength: 96, nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -205,14 +209,14 @@ namespace AbpODataDemo.Migrations
                 name: "AbpOrganizationUnitRoles",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false),
-                    OrganizationUnitId = table.Column<long>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    OrganizationUnitId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -223,19 +227,19 @@ namespace AbpODataDemo.Migrations
                 name: "AbpOrganizationUnits",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    ParentId = table.Column<long>(nullable: true),
-                    Code = table.Column<string>(maxLength: 95, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(95)", maxLength: 95, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -244,25 +248,24 @@ namespace AbpODataDemo.Migrations
                         name: "FK_AbpOrganizationUnits_AbpOrganizationUnits_ParentId",
                         column: x => x.ParentId,
                         principalTable: "AbpOrganizationUnits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AbpTenantNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    NotificationName = table.Column<string>(maxLength: 96, nullable: false),
-                    Data = table.Column<string>(maxLength: 1048576, nullable: true),
-                    DataTypeName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityTypeName = table.Column<string>(maxLength: 250, nullable: true),
-                    EntityTypeAssemblyQualifiedName = table.Column<string>(maxLength: 512, nullable: true),
-                    EntityId = table.Column<string>(maxLength: 96, nullable: true),
-                    Severity = table.Column<byte>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    NotificationName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 1048576, nullable: true),
+                    DataTypeName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityTypeName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    EntityTypeAssemblyQualifiedName = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    EntityId = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    Severity = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -273,20 +276,20 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserAccounts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    UserLinkId = table.Column<long>(nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    EmailAddress = table.Column<string>(maxLength: 256, nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    UserLinkId = table.Column<long>(type: "bigint", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -297,17 +300,17 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserLoginAttempts",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    TenancyName = table.Column<string>(maxLength: 64, nullable: true),
-                    UserId = table.Column<long>(nullable: true),
-                    UserNameOrEmailAddress = table.Column<string>(maxLength: 256, nullable: true),
-                    ClientIpAddress = table.Column<string>(maxLength: 64, nullable: true),
-                    ClientName = table.Column<string>(maxLength: 128, nullable: true),
-                    BrowserInfo = table.Column<string>(maxLength: 512, nullable: true),
-                    Result = table.Column<byte>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    TenancyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    UserNameOrEmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClientIpAddress = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    ClientName = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    BrowserInfo = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    Result = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -318,12 +321,12 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserNotifications",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    TenantNotificationId = table.Column<Guid>(nullable: false),
-                    State = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    TenantNotificationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -334,14 +337,14 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserOrganizationUnits",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    OrganizationUnitId = table.Column<long>(nullable: false),
-                    IsDeleted = table.Column<bool>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    OrganizationUnitId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -352,36 +355,36 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUsers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    AuthenticationSource = table.Column<string>(maxLength: 64, nullable: true),
-                    UserName = table.Column<string>(maxLength: 256, nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    EmailAddress = table.Column<string>(maxLength: 256, nullable: false),
-                    Name = table.Column<string>(maxLength: 64, nullable: false),
-                    Surname = table.Column<string>(maxLength: 64, nullable: false),
-                    Password = table.Column<string>(maxLength: 128, nullable: false),
-                    EmailConfirmationCode = table.Column<string>(maxLength: 328, nullable: true),
-                    PasswordResetCode = table.Column<string>(maxLength: 328, nullable: true),
-                    LockoutEndDateUtc = table.Column<DateTime>(nullable: true),
-                    AccessFailedCount = table.Column<int>(nullable: false),
-                    IsLockoutEnabled = table.Column<bool>(nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 32, nullable: true),
-                    IsPhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    SecurityStamp = table.Column<string>(maxLength: 128, nullable: true),
-                    IsTwoFactorEnabled = table.Column<bool>(nullable: false),
-                    IsEmailConfirmed = table.Column<bool>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
-                    NormalizedEmailAddress = table.Column<string>(maxLength: 256, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 128, nullable: true)
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AuthenticationSource = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    EmailConfirmationCode = table.Column<string>(type: "nvarchar(328)", maxLength: 328, nullable: true),
+                    PasswordResetCode = table.Column<string>(type: "nvarchar(328)", maxLength: 328, nullable: true),
+                    LockoutEndDateUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    IsLockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: true),
+                    IsPhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    IsTwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    IsEmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    NormalizedEmailAddress = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -390,33 +393,30 @@ namespace AbpODataDemo.Migrations
                         name: "FK_AbpUsers_AbpUsers_CreatorUserId",
                         column: x => x.CreatorUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AbpUsers_AbpUsers_DeleterUserId",
                         column: x => x.DeleterUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AbpUsers_AbpUsers_LastModifierUserId",
                         column: x => x.LastModifierUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AbpWebhookEvents",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    WebhookName = table.Column<string>(nullable: false),
-                    Data = table.Column<string>(nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeletionTime = table.Column<DateTime>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -427,15 +427,15 @@ namespace AbpODataDemo.Migrations
                 name: "AbpWebhookSubscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    WebhookUri = table.Column<string>(nullable: false),
-                    Secret = table.Column<string>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    Webhooks = table.Column<string>(nullable: true),
-                    Headers = table.Column<string>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    WebhookUri = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Secret = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Webhooks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Headers = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -446,16 +446,16 @@ namespace AbpODataDemo.Migrations
                 name: "Persons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(maxLength: 32, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -466,11 +466,11 @@ namespace AbpODataDemo.Migrations
                 name: "AbpDynamicEntityProperties",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntityFullName = table.Column<string>(nullable: true),
-                    DynamicPropertyId = table.Column<int>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true)
+                    EntityFullName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    DynamicPropertyId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -487,11 +487,11 @@ namespace AbpODataDemo.Migrations
                 name: "AbpDynamicPropertyValues",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true),
-                    DynamicPropertyId = table.Column<int>(nullable: false)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    DynamicPropertyId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -508,15 +508,15 @@ namespace AbpODataDemo.Migrations
                 name: "AbpFeatures",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(maxLength: 2000, nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    EditionId = table.Column<int>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EditionId = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -533,14 +533,14 @@ namespace AbpODataDemo.Migrations
                 name: "AbpEntityChanges",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChangeTime = table.Column<DateTime>(nullable: false),
-                    ChangeType = table.Column<byte>(nullable: false),
-                    EntityChangeSetId = table.Column<long>(nullable: false),
-                    EntityId = table.Column<string>(maxLength: 48, nullable: true),
-                    EntityTypeFullName = table.Column<string>(maxLength: 192, nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    ChangeTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChangeType = table.Column<byte>(type: "tinyint", nullable: false),
+                    EntityChangeSetId = table.Column<long>(type: "bigint", nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(48)", maxLength: 48, nullable: true),
+                    EntityTypeFullName = table.Column<string>(type: "nvarchar(192)", maxLength: 192, nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -557,23 +557,23 @@ namespace AbpODataDemo.Migrations
                 name: "AbpRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 32, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 64, nullable: false),
-                    IsStatic = table.Column<bool>(nullable: false),
-                    IsDefault = table.Column<bool>(nullable: false),
-                    NormalizedName = table.Column<string>(maxLength: 32, nullable: false),
-                    ConcurrencyStamp = table.Column<string>(maxLength: 128, nullable: true),
-                    Description = table.Column<string>(maxLength: 5000, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    DisplayName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    IsStatic = table.Column<bool>(type: "bit", nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false),
+                    NormalizedName = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -582,36 +582,33 @@ namespace AbpODataDemo.Migrations
                         name: "FK_AbpRoles_AbpUsers_CreatorUserId",
                         column: x => x.CreatorUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AbpRoles_AbpUsers_DeleterUserId",
                         column: x => x.DeleterUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AbpRoles_AbpUsers_LastModifierUserId",
                         column: x => x.LastModifierUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AbpSettings",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true),
-                    Name = table.Column<string>(maxLength: 256, nullable: false),
-                    Value = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -620,70 +617,65 @@ namespace AbpODataDemo.Migrations
                         name: "FK_AbpSettings_AbpUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AbpTenants",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    LastModifierUserId = table.Column<long>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false),
-                    DeleterUserId = table.Column<long>(nullable: true),
-                    DeletionTime = table.Column<DateTime>(nullable: true),
-                    TenancyName = table.Column<string>(maxLength: 64, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    ConnectionString = table.Column<string>(maxLength: 1024, nullable: true),
-                    IsActive = table.Column<bool>(nullable: false),
-                    EditionId = table.Column<int>(nullable: true)
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenancyName = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ConnectionString = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    EditionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpTenants", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_AbpTenants_AbpEditions_EditionId",
+                        column: x => x.EditionId,
+                        principalTable: "AbpEditions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_AbpTenants_AbpUsers_CreatorUserId",
                         column: x => x.CreatorUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AbpTenants_AbpUsers_DeleterUserId",
                         column: x => x.DeleterUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AbpTenants_AbpEditions_EditionId",
-                        column: x => x.EditionId,
-                        principalTable: "AbpEditions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_AbpTenants_AbpUsers_LastModifierUserId",
                         column: x => x.LastModifierUserId,
                         principalTable: "AbpUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "AbpUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    ClaimType = table.Column<string>(maxLength: 256, nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -700,12 +692,12 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserLogins",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 256, nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -722,13 +714,13 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserRoles",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -745,14 +737,14 @@ namespace AbpODataDemo.Migrations
                 name: "AbpUserTokens",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TenantId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: true),
-                    Value = table.Column<string>(maxLength: 512, nullable: true),
-                    ExpireDate = table.Column<DateTime>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -769,14 +761,14 @@ namespace AbpODataDemo.Migrations
                 name: "AbpWebhookSendAttempts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    WebhookEventId = table.Column<Guid>(nullable: false),
-                    WebhookSubscriptionId = table.Column<Guid>(nullable: false),
-                    Response = table.Column<string>(nullable: true),
-                    ResponseStatusCode = table.Column<int>(nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    LastModificationTime = table.Column<DateTime>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookEventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WebhookSubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Response = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResponseStatusCode = table.Column<int>(type: "int", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -793,13 +785,13 @@ namespace AbpODataDemo.Migrations
                 name: "Phones",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    PersonId = table.Column<int>(nullable: false),
-                    Type = table.Column<int>(nullable: false),
-                    Number = table.Column<string>(maxLength: 16, nullable: false)
+                    PersonId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -816,12 +808,12 @@ namespace AbpODataDemo.Migrations
                 name: "AbpDynamicEntityPropertyValues",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Value = table.Column<string>(nullable: false),
-                    EntityId = table.Column<string>(nullable: true),
-                    DynamicEntityPropertyId = table.Column<int>(nullable: false),
-                    TenantId = table.Column<int>(nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EntityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DynamicEntityPropertyId = table.Column<int>(type: "int", nullable: false),
+                    TenantId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -838,14 +830,16 @@ namespace AbpODataDemo.Migrations
                 name: "AbpEntityPropertyChanges",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntityChangeId = table.Column<long>(nullable: false),
-                    NewValue = table.Column<string>(maxLength: 512, nullable: true),
-                    OriginalValue = table.Column<string>(maxLength: 512, nullable: true),
-                    PropertyName = table.Column<string>(maxLength: 96, nullable: true),
-                    PropertyTypeFullName = table.Column<string>(maxLength: 192, nullable: true),
-                    TenantId = table.Column<int>(nullable: true)
+                    EntityChangeId = table.Column<long>(type: "bigint", nullable: false),
+                    NewValue = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    OriginalValue = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    PropertyName = table.Column<string>(type: "nvarchar(96)", maxLength: 96, nullable: true),
+                    PropertyTypeFullName = table.Column<string>(type: "nvarchar(192)", maxLength: 192, nullable: true),
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    NewValueHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OriginalValueHash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -862,16 +856,16 @@ namespace AbpODataDemo.Migrations
                 name: "AbpPermissions",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    IsGranted = table.Column<bool>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    RoleId = table.Column<int>(nullable: true),
-                    UserId = table.Column<long>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    IsGranted = table.Column<bool>(type: "bit", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -894,14 +888,14 @@ namespace AbpODataDemo.Migrations
                 name: "AbpRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreatorUserId = table.Column<long>(nullable: true),
-                    TenantId = table.Column<int>(nullable: true),
-                    RoleId = table.Column<int>(nullable: false),
-                    ClaimType = table.Column<string>(maxLength: 256, nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true)
+                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -1044,14 +1038,14 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "Code" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpPermissions_TenantId_Name",
-                table: "AbpPermissions",
-                columns: new[] { "TenantId", "Name" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissions_RoleId",
                 table: "AbpPermissions",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpPermissions_TenantId_Name",
+                table: "AbpPermissions",
+                columns: new[] { "TenantId", "Name" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissions_UserId",
@@ -1089,15 +1083,15 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "NormalizedName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpSettings_UserId",
-                table: "AbpSettings",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpSettings_TenantId_Name_UserId",
                 table: "AbpSettings",
                 columns: new[] { "TenantId", "Name", "UserId" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpSettings_UserId",
+                table: "AbpSettings",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpTenantNotifications_TenantId",
@@ -1135,11 +1129,6 @@ namespace AbpODataDemo.Migrations
                 column: "EmailAddress");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserAccounts_UserName",
-                table: "AbpUserAccounts",
-                column: "UserName");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserAccounts_TenantId_EmailAddress",
                 table: "AbpUserAccounts",
                 columns: new[] { "TenantId", "EmailAddress" });
@@ -1155,9 +1144,9 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "UserName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserClaims_UserId",
-                table: "AbpUserClaims",
-                column: "UserId");
+                name: "IX_AbpUserAccounts_UserName",
+                table: "AbpUserAccounts",
+                column: "UserName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_TenantId_ClaimType",
@@ -1165,9 +1154,9 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "ClaimType" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLoginAttempts_UserId_TenantId",
-                table: "AbpUserLoginAttempts",
-                columns: new[] { "UserId", "TenantId" });
+                name: "IX_AbpUserClaims_UserId",
+                table: "AbpUserClaims",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLoginAttempts_TenancyName_UserNameOrEmailAddress_Result",
@@ -1175,9 +1164,21 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenancyName", "UserNameOrEmailAddress", "Result" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLogins_UserId",
+                name: "IX_AbpUserLoginAttempts_UserId_TenantId",
+                table: "AbpUserLoginAttempts",
+                columns: new[] { "UserId", "TenantId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserLogins_ProviderKey_TenantId",
                 table: "AbpUserLogins",
-                column: "UserId");
+                columns: new[] { "ProviderKey", "TenantId" },
+                unique: true,
+                filter: "[TenantId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",
+                table: "AbpUserLogins",
+                columns: new[] { "TenantId", "LoginProvider", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserLogins_TenantId_UserId",
@@ -1185,9 +1186,9 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserLogins_TenantId_LoginProvider_ProviderKey",
+                name: "IX_AbpUserLogins_UserId",
                 table: "AbpUserLogins",
-                columns: new[] { "TenantId", "LoginProvider", "ProviderKey" });
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserNotifications_UserId_State_CreationTime",
@@ -1205,11 +1206,6 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserRoles_UserId",
-                table: "AbpUserRoles",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserRoles_TenantId_RoleId",
                 table: "AbpUserRoles",
                 columns: new[] { "TenantId", "RoleId" });
@@ -1218,6 +1214,11 @@ namespace AbpODataDemo.Migrations
                 name: "IX_AbpUserRoles_TenantId_UserId",
                 table: "AbpUserRoles",
                 columns: new[] { "TenantId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserRoles_UserId",
+                table: "AbpUserRoles",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUsers_CreatorUserId",
@@ -1245,14 +1246,14 @@ namespace AbpODataDemo.Migrations
                 columns: new[] { "TenantId", "NormalizedUserName" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpUserTokens_UserId",
-                table: "AbpUserTokens",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserTokens_TenantId_UserId",
                 table: "AbpUserTokens",
                 columns: new[] { "TenantId", "UserId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpUserTokens_UserId",
+                table: "AbpUserTokens",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpWebhookSendAttempts_WebhookEventId",
