@@ -17,10 +17,8 @@ using Abp.AspNetCore.SignalR.Hubs;
 using Abp.Dependency;
 using Abp.Json;
 using AbpODataDemo.People;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
-using Microsoft.AspNet.OData.Formatter;
-using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 
@@ -41,10 +39,7 @@ namespace AbpODataDemo.Web.Host.Startup
         {
             //MVC
             services.AddControllersWithViews(
-                options =>
-                {
-                    options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute());
-                }
+                options => { options.Filters.Add(new AbpAutoValidateAntiforgeryTokenAttribute()); }
             ).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ContractResolver = new AbpMvcContractResolver(IocManager.Instance)
@@ -52,7 +47,6 @@ namespace AbpODataDemo.Web.Host.Startup
                     NamingStrategy = new CamelCaseNamingStrategy()
                 };
             });
-
 
 
             IdentityRegistrar.Register(services);
@@ -87,26 +81,21 @@ namespace AbpODataDemo.Web.Host.Startup
                 // Define the BearerAuth scheme that's in use
                 options.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme()
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description =
+                        "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
                 });
             });
 
-            services.AddOData();
 
             // Workaround: https://github.com/OData/WebApi/issues/1177
-            services.AddMvc(options =>
+            services.AddMvc().AddOData(opts =>
             {
-                foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
-                {
-                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
-                }
-                foreach (var inputFormatter in options.InputFormatters.OfType<ODataInputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
-                {
-                    inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
-                }
+                var builder = new ODataConventionModelBuilder();
+                builder.EntitySet<Person>("Persons").EntityType.Expand().Filter().OrderBy().Page().Select();
+                opts.AddRouteComponents("odata", builder.GetEdmModel());
             });
 
             // Configure Abp and Dependency Injection
@@ -118,9 +107,17 @@ namespace AbpODataDemo.Web.Host.Startup
             );
         }
 
-        public void Configure(IApplicationBuilder app,  ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
+
+            // Return IQueryable from controllers
+            app.UseUnitOfWork(options =>
+            {
+                options.Filter = httpContext =>
+                    httpContext.Request.Path.Value != null &&
+                    httpContext.Request.Path.Value.StartsWith("/odata");
+            });
 
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
@@ -135,7 +132,11 @@ namespace AbpODataDemo.Web.Host.Startup
             // Return IQueryable from controllers
             app.UseUnitOfWork(options =>
             {
-                options.Filter = httpContext => httpContext.Request.Path.Value.StartsWith("/odata", StringComparison.InvariantCultureIgnoreCase);
+                options.Filter = httpContext =>
+                    httpContext.Request.Path.Value != null &&
+                    httpContext.Request.Path.Value.StartsWith("/odata",
+                        StringComparison.InvariantCultureIgnoreCase
+                    );
             });
 
             app.UseODataBatching();
@@ -144,10 +145,6 @@ namespace AbpODataDemo.Web.Host.Startup
                 endpoints.MapHub<AbpCommonHub>("/signalr");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
-
-                var builder = new ODataConventionModelBuilder();
-                builder.EntitySet<Person>("Persons").EntityType.Expand().Filter().OrderBy().Page();
-                endpoints.MapODataRoute("odataPrefix", "odata",  builder.GetEdmModel());
             });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
@@ -155,9 +152,14 @@ namespace AbpODataDemo.Web.Host.Startup
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint(_appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json", "AbpODataDemo API V1");
-                options.IndexStream = () => Assembly.GetExecutingAssembly()
-                    .GetManifestResourceStream("AbpODataDemo.Web.Host.wwwroot.swagger.ui.index.html");
+                options.SwaggerEndpoint(
+                    _appConfiguration["App:ServerRootAddress"].EnsureEndsWith('/') + "swagger/v1/swagger.json",
+                    "AbpODataDemo API V1"
+                );
+
+                options.IndexStream = () =>
+                    Assembly.GetExecutingAssembly()
+                        .GetManifestResourceStream("AbpODataDemo.Web.Host.wwwroot.swagger.ui.index.html");
             }); // URL: /swagger
         }
     }

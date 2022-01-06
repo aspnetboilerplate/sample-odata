@@ -3,10 +3,12 @@ using Abp.Dependency;
 using Abp.Domain.Repositories;
 using Abp.Web.Models;
 using AbpODataDemo.People;
-using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.OData.Deltas;
+using Microsoft.AspNetCore.OData.Formatter;
+using Microsoft.AspNetCore.OData.Results;
 
 namespace AbpODataDemo.Controllers
 {
