@@ -1,7 +1,7 @@
 ﻿using Abp.Web.Results.Filters;
 using System;
 
-namespace AbpODataDemo.ResultWrapping
+namespace AbpODataDemo.Web.Host.ResultWrapping
 {
     public class ODataWrapResultFilter : IWrapResultFilter
     {
