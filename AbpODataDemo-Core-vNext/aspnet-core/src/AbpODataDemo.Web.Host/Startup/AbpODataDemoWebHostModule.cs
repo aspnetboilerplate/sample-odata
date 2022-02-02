@@ -4,7 +4,7 @@ using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using AbpODataDemo.Configuration;
-using AbpODataDemo.ResultWrapping;
+using AbpODataDemo.Web.Host.ResultWrapping;
 
 namespace AbpODataDemo.Web.Host.Startup
 {
