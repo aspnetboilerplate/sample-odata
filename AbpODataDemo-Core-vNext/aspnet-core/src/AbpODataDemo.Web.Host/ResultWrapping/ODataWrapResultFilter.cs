@@ -5,10 +5,6 @@ namespace AbpODataDemo.ResultWrapping
 {
     public class ODataWrapResultFilter : IWrapResultFilter
     {
-        public ODataWrapResultFilter()
-        {
-        }
-
         public bool HasFilterForWrapOnError(string url, out bool wrapOnError)
         {
             wrapOnError = false;
