@@ -25,7 +25,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Abp.ZeroCore" Version="7.0.1" />
-    <PackageReference Include="Abp.AspNetCore.SignalR" Version="7.0.1" />
-    <PackageReference Include="Abp.AspNetCore.OData" Version="7.0.1" />
+    <PackageReference Include="Abp.AspNetCore.SignalR" Version="7.1.0" />
+    <PackageReference Include="Abp.AspNetCore.OData" Version="7.1.0" />
   </ItemGroup>
 </Project>
