@@ -31,8 +31,8 @@
     <ProjectReference Include="..\AbpODataDemo.Web.Core\AbpODataDemo.Web.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Abp.Castle.Log4Net" Version="7.0.1" />
-    <PackageReference Include="Abp.AspNetCore.OData" Version="7.0.1" />
+    <PackageReference Include="Abp.Castle.Log4Net" Version="7.1.0" />
+    <PackageReference Include="Abp.AspNetCore.OData" Version="7.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

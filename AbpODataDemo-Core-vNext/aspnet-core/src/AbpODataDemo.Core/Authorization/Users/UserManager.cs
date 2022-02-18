@@ -33,7 +33,8 @@ namespace AbpODataDemo.Authorization.Users
             IRepository<OrganizationUnit, long> organizationUnitRepository, 
             IRepository<UserOrganizationUnit, long> userOrganizationUnitRepository, 
             IOrganizationUnitSettings organizationUnitSettings, 
-            ISettingManager settingManager)
+            ISettingManager settingManager,
+            IRepository<UserLogin, long> userLoginRepository)
             : base(
                 roleManager, 
                 store, 
@@ -51,7 +52,8 @@ namespace AbpODataDemo.Authorization.Users
                 organizationUnitRepository, 
                 userOrganizationUnitRepository, 
                 organizationUnitSettings, 
-                settingManager)
+                settingManager,
+                userLoginRepository)
         {
         }
     }

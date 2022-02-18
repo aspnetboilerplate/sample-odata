@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Abp.AspNetCore.OData.ResultWrapping;
 using Abp.Configuration.Startup;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using AbpODataDemo.Configuration;
-using AbpODataDemo.Web.Host.ResultWrapping;
 
 namespace AbpODataDemo.Web.Host.Startup
 {
@@ -23,7 +23,7 @@ namespace AbpODataDemo.Web.Host.Startup
 
         public override void PreInitialize()
         {
-            Configuration.Modules.AbpWebCommon().WrapResultFilters.Add(new ODataWrapResultFilter());
+            Configuration.Modules.AbpWebCommon().WrapResultFilters.Add(new AbpODataDontWrapResultFilter());
         }
 
         public override void Initialize()

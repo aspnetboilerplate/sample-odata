@@ -6,5 +6,5 @@ Issues of this repository are tracked on https://github.com/aspnetboilerplate/as
 
 Each sample project contains its own README in its own folder.
 
-* ASP.NET Core: [AbpODataDemo-Core](AbpODataDemo-Core)
+* ASP.NET Core: [AbpODataDemo-Core-vNext](AbpODataDemo-Core-vNext)
 * ASP.NET MVC 5.x: [AbpODataDemo](AbpODataDemo)
