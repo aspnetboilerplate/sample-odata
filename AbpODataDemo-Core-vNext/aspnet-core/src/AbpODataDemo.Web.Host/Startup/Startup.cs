@@ -111,14 +111,6 @@ namespace AbpODataDemo.Web.Host.Startup
         {
             app.UseAbp(options => { options.UseAbpRequestLocalization = false; }); // Initializes ABP framework.
 
-            // Return IQueryable from controllers
-            app.UseUnitOfWork(options =>
-            {
-                options.Filter = httpContext =>
-                    httpContext.Request.Path.Value != null &&
-                    httpContext.Request.Path.Value.StartsWith("/odata");
-            });
-
             app.UseCors(_defaultCorsPolicyName); // Enable CORS!
 
             app.UseStaticFiles();
