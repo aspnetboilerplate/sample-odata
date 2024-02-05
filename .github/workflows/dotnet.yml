@@ -1,0 +1,41 @@
+name: .NET
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1
+
+    - name: Restore NuGet packages
+      run: dotnet restore
+
+    - name: Set startup project
+      run: dotnet sln setstartup AbpODataDemo.WebHost
+
+    - name: Update database
+      run: |
+        dotnet tool install --global dotnet-ef
+        cd AbpODataDemo.EntityFramework
+        dotnet ef database update
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+
+    - name: Run
+      run: dotnet run --project AbpODataDemo.WebHost
